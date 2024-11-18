@@ -1,14 +1,4 @@
-import mnemonic
-import bip32utils
-import requests
-import logging
-import time
-import os
-import itertools
 
-def generate_mnemonic():
-    mnemo = mnemonic.Mnemonic("english")
-    return mnemo.generate(strength=128)
 
 def recover_wallet_from_mnemonic(mnemonic_phrase):
     seed = mnemonic.Mnemonic.to_seed(mnemonic_phrase)
