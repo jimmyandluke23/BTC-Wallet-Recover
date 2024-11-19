@@ -1,5 +1,8 @@
 
 
+import logging
+
+
 def recover_wallet_from_mnemonic(mnemonic_phrase):
     seed = mnemonic.Mnemonic.to_seed(mnemonic_phrase)
     root_key = bip32utils.BIP32Key.fromEntropy(seed)
@@ -36,22 +39,4 @@ def recover_wallet_from_partial_mnemonic(partial_mnemonic):
     logging.info("No wallet found with the provided partial mnemonic phrase.")
     return None, 0, None
 
-def check_BTC_balance(address, retries=3, delay=5):
-    for attempt in range(retries):
-        try:
-            response = requests.get(f"https://blockchain.info/balance?active={address}", timeout=10)
-            response.raise_for_status()
-            data = response.json()
-            mnemonic_phrase, balance, address = recover_wallet_from_mnemonic(mnemonic_phrase)
-            logging.info(f"Mnemonic Phrase: {mnemonic_phrase}")
-            logging.info(f"Wallet Address: {address}")
-            if balance > 0:
-                logging.info(f"Found wallet with non-zero balance: {balance} BTC")
-                with open("wallet.txt", "a") as f:
-                    f.write(f"Mnemonic Phrase: {mnemonic_phrase}\n")
-                    f.write(f"Wallet Address: {address}\n")
-                    f.write(f"Balance: {balance} BTC\n\n")
-            else:
-                logging.info(f"Wallet with zero balance {balance}. Trying again...")
-            mnemonic_count += 1
-            logging.info(f"Total Mnemonic Phrases generated: {mnemonic_count}")
+
